@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="MakeableDrugPillBase">
+    <defName>Codeine</defName>
+    <label>Codeine</label>
+    <description>Codeine is an opioid that inhibts the pain and relax the muscles of the user.</description>
+    <graphicData>
+      <texPath>Things/Item/Drug/Codeine</texPath>
+      <graphicClass>Graphic_StackCount</graphicClass>
+    </graphicData>
+    <rotatable>false</rotatable>
+    <statBases>
+      <WorkToMake>900</WorkToMake>
+      <MarketValue>25</MarketValue>
+      <Mass>0.020</Mass>
+    </statBases>
+    <techLevel>Industrial</techLevel>
+    <ingestible>
+      <joy>0.25</joy>
+        <drugCategory>Hard</drugCategory>
+        <outcomeDoers>
+        <li Class="IngestionOutcomeDoer_GiveHediff">
+          <hediffDef>CodeineHigh</hediffDef>
+          <severity>0.45</severity>
+          <toleranceChemical>Codeine</toleranceChemical>
+        </li>
+        <li Class="IngestionOutcomeDoer_OffsetNeed">
+          <need>Rest</need>
+          <offset>-0.7</offset>
+          <toleranceChemical>Codeine</toleranceChemical>
+        </li>
+        <li Class="IngestionOutcomeDoer_GiveHediff">
+          <hediffDef>CodeineTolerance</hediffDef>
+          <severity>0.040</severity>
+          <divideByBodySize>true</divideByBodySize>
+        </li>
+      </outcomeDoers>
+    </ingestible>
+    <recipeMaker>
+      <researchPrerequisite>WakeUpProduction</researchPrerequisite>
+      <recipeUsers>
+        <li>DrugLab</li>
+      </recipeUsers>
+    </recipeMaker>
+    <costList>
+      <Neutroamine>3</Neutroamine>
+      <Methylamine>2</Methylamine>
+    </costList>
+    <comps>
+      <li Class="CompProperties_Drug">
+        <chemical>Codeine</chemical>
+        <addictiveness>0.06</addictiveness>
+        <minToleranceToAddict>0.25</minToleranceToAddict>
+        <existingAddictionSeverityOffset>0.30</existingAddictionSeverityOffset>
+        <needLevelOffset>1</needLevelOffset>
+        <listOrder>210</listOrder>
+        <overdoseSeverityOffset>
+          <min>0.25</min>
+          <max>0.55</max>
+        </overdoseSeverityOffset>
+        <largeOverdoseChance>0.01</largeOverdoseChance>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <HediffDef>
+    <defName>CodeineHigh</defName>
+    <hediffClass>HediffWithComps</hediffClass>
+    <label>high on Codeine</label>
+    <defaultLabelColor>(1,0,0.5)</defaultLabelColor>
+    <scenarioCanAdd>true</scenarioCanAdd>
+    <maxSeverity>1.0</maxSeverity>
+    <comps>
+      <li Class="HediffCompProperties_SeverityPerDay">
+        <severityPerDay>-0.6</severityPerDay>
+      </li>
+    </comps>
+    <stages>
+      <li>
+        <restFallFactor>-0.7</restFallFactor>
+		<painOffset>-0.7</painOffset>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>-0.1</offset>
+          </li>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>-0.05</offset>
+          </li>
+		  <li>
+            <capacity>BloodFiltration</capacity>
+            <offset>0.15</offset>
+          </li>
+		  <li>
+            <capacity>Metabolism</capacity>
+            <offset>0.05</offset>
+          </li>
+        </capMods>
+        <statOffsets>
+          <WorkSpeedGlobal>-0.45</WorkSpeedGlobal>
+        </statOffsets>
+        <hediffGivers>
+          <li Class="HediffGiver_Random">
+            <hediff>HeartAttack</hediff>
+            <mtbDays>300</mtbDays>
+          </li>
+        </hediffGivers>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <ThoughtDef>
+    <defName>CodeineThought</defName>
+    <workerClass>ThoughtWorker_Hediff</workerClass>
+    <hediff>CodeineHigh</hediff>
+    <stages>
+      <li>
+        <label>feeling energised</label>
+        <description>I feel very sleepy, I really want to lay down and let the trip begun.</description>
+        <baseMoodEffect>25</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <!-- Codeine addiction -->
+
+  <ChemicalDef>
+    <defName>Codeine</defName>
+    <label>Codeine</label>
+    <addictionHediff>CodeineAddiction</addictionHediff>
+    <toleranceHediff>CodeineTolerance</toleranceHediff>
+  </ChemicalDef>
+
+  <NeedDef ParentName="DrugAddictionNeedBase">
+    <defName>Chemical_Codeine</defName>
+    <needClass>Need_Chemical</needClass>
+    <label>Codeine</label>
+    <description>Because of an Codeine addiction, this person needs to regularly consume the drug to avoid withdrawal symptoms.</description>
+    <listPriority>40</listPriority>
+  </NeedDef>
+
+  <HediffDef ParentName="DrugToleranceBase">
+    <defName>CodeineTolerance</defName>
+    <label>Codeine tolerance</label>
+    <comps>
+      <li Class="HediffCompProperties_SeverityPerDay">
+        <severityPerDay>-0.045</severityPerDay>
+      </li>
+      <li Class="HediffCompProperties_DrugEffectFactor">
+        <chemical>Codeine</chemical>
+      </li>
+    </comps>
+	    <hediffGivers>
+      <li Class="HediffGiver_RandomDrugEffect">
+        <hediff>ChemicalDamageModerate</hediff>
+        <minSeverity>0.45</minSeverity>
+        <baseMtbDays>60</baseMtbDays>
+        <partsToAffect>
+          <li>Liver</li>
+        </partsToAffect>
+      </li>     
+   </hediffGivers>
+  </HediffDef>
+
+  <HediffDef ParentName="AddictionBase">
+    <defName>CodeineAddiction</defName>
+    <hediffClass>Hediff_Addiction</hediffClass>
+    <label>Codeine addiction</label>
+    <causesNeed>Chemical_Codeine</causesNeed>
+    <comps>
+      <li Class="HediffCompProperties_SeverityPerDay">
+        <severityPerDay>-0.1</severityPerDay>
+      </li>
+    </comps>
+    <stages>
+      <li>
+      </li>
+      <li>
+        <label>withdrawal</label>
+        <restFallFactor>1.5</restFallFactor>
+        <socialFightChanceFactor>2.0</socialFightChanceFactor>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>-0.10</offset>
+          </li>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>-0.15</offset>
+          </li>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>-0.10</offset>
+          </li>
+        </capMods>
+        <mentalStateGivers>
+          <li>
+            <mentalState>BingingDrugMajor</mentalState>
+            <mtbDays>60</mtbDays>
+          </li>
+          <li>
+            <mentalState>WanderPsychotic</mentalState>
+            <mtbDays>10</mtbDays>
+          </li>
+        </mentalStateGivers>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <ThoughtDef>
+    <defName>CodeineWithdrawal</defName>
+    <workerClass>ThoughtWorker_Hediff</workerClass>
+    <hediff>CodeineAddiction</hediff>
+    <validWhileDespawned>true</validWhileDespawned>
+    <stages>
+      <li>
+        <visible>false</visible>
+      </li>
+      <li>
+        <label>Codeine withdrawal</label>
+        <description>I cant sleep without my pills, i feel very tired and confused.</description>
+        <baseMoodEffect>-30</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+</Defs>
