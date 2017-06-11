@@ -4,7 +4,7 @@
   <ThingDef ParentName="MakeableDrugPillBase">
     <defName>Codeine</defName>
     <label>Codeine</label>
-    <description>Codeine is an opioid that inhibts the pain and relax the muscles of the user.</description>
+    <description>Codeine is an opiate that inhibits the pain and relax the muscles of the user.</description>
     <graphicData>
       <texPath>Things/Item/Drug/Codeine</texPath>
       <graphicClass>Graphic_StackCount</graphicClass>
@@ -44,8 +44,8 @@
       </recipeUsers>
     </recipeMaker>
     <costList>
-      <Neutroamine>3</Neutroamine>
-      <Methylamine>2</Methylamine>
+      <Neutroamine>2</Neutroamine>
+      <Healroot>2</Healroot>
     </costList>
     <comps>
       <li Class="CompProperties_Drug">
